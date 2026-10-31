@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Judges · Euronova CTF</title>
+<style>:root{--sans:"IBM Plex Sans","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:"IBM Plex Mono","JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;--bg:#eef1f5;--card:#fff;--panel2:#f4f6f9;--line:#d8dee7;--line2:#b9c4d2;--text:#16202d;--muted:#5a6a7e;--accent:#1c64d6;--on:#fff;--ok:#0f7d4a;--bad:#c52b3a;--amber:#955c00;--ring:rgba(28,100,214,.22);--grid:rgba(30,70,130,.05);--grid2:rgba(30,70,130,.09);--shadow:0 1px 2px rgba(20,35,60,.06),0 10px 24px -18px rgba(20,35,60,.35);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#090c11;--card:#10151c;--panel2:#161d27;--line:#222d3b;--line2:#34455a;--text:#dde6f0;--muted:#8393a8;--accent:#4aa8ff;--on:#06121f;--ok:#3fd08a;--bad:#ff6b73;--amber:#f2b34a;--ring:rgba(74,168,255,.28);--grid:rgba(120,160,210,.045);--grid2:rgba(120,160,210,.09);--shadow:0 1px 2px rgba(0,0,0,.5),0 14px 30px -18px rgba(0,0,0,.8);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#090c11;--card:#10151c;--panel2:#161d27;--line:#222d3b;--line2:#34455a;--text:#dde6f0;--muted:#8393a8;--accent:#4aa8ff;--on:#06121f;--ok:#3fd08a;--bad:#ff6b73;--amber:#f2b34a;--ring:rgba(74,168,255,.28);--grid:rgba(120,160,210,.045);--grid2:rgba(120,160,210,.09);--shadow:0 1px 2px rgba(0,0,0,.5),0 14px 30px -18px rgba(0,0,0,.8);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+::selection{background:var(--accent);color:var(--on)}
+body{margin:0;background-color:var(--bg);background-image:linear-gradient(var(--grid2) 1px,transparent 1px),linear-gradient(90deg,var(--grid2) 1px,transparent 1px),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:100px 100px,100px 100px,20px 20px,20px 20px;color:var(--text);font:15px/1.55 var(--sans)}
+main{max-width:760px;margin:0 auto;padding:28px 16px 56px}
+
+/* masthead: title with a measurement ruler */
+h1{font:600 clamp(26px,6vw,34px)/1.15 var(--sans);letter-spacing:-.01em;margin:0}
+h1::before{content:"";display:inline-block;width:8px;height:.8em;margin-right:.45em;background:var(--accent);vertical-align:-.06em}
+.sub{color:var(--muted);margin:8px 0 28px;max-width:56ch}
+.sub::after{content:"";display:block;height:12px;margin-top:16px;border-top:1px solid var(--line2);background:repeating-linear-gradient(90deg,var(--line2) 0 1px,transparent 1px 10px) 0 0/100% 5px no-repeat,repeating-linear-gradient(90deg,var(--line2) 0 1px,transparent 1px 50px) 0 0/100% 11px no-repeat}
+
+/* section headers with a hairline rule */
+h2{display:flex;align-items:center;gap:10px;font:600 14px/1.2 var(--sans);margin:34px 0 12px}
+h2::before{content:"";width:6px;height:6px;background:var(--accent)}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.pts{color:var(--muted);font:13px var(--mono)}
+.note{color:var(--muted);font-size:13px;margin-top:10px}
+.msg{font-size:14px;margin-top:10px;min-height:20px}
+.msg:not(:empty){padding:6px 10px;border-left:2px solid currentColor;background:var(--panel2)}
+
+/* panels with corner registration marks */
+.card{--tick:var(--line2);position:relative;border:1px solid var(--line);border-radius:3px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);transition:border-color .2s,box-shadow .2s;
+background:
+linear-gradient(var(--tick),var(--tick)) 0 0/14px 2px no-repeat,linear-gradient(var(--tick),var(--tick)) 0 0/2px 14px no-repeat,
+linear-gradient(var(--tick),var(--tick)) 100% 0/14px 2px no-repeat,linear-gradient(var(--tick),var(--tick)) 100% 0/2px 14px no-repeat,
+linear-gradient(var(--tick),var(--tick)) 0 100%/14px 2px no-repeat,linear-gradient(var(--tick),var(--tick)) 0 100%/2px 14px no-repeat,
+linear-gradient(var(--tick),var(--tick)) 100% 100%/14px 2px no-repeat,linear-gradient(var(--tick),var(--tick)) 100% 100%/2px 14px no-repeat,
+var(--card)}
+#chal{--tick:var(--accent);border-color:var(--line2)}
+#chal:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring),var(--shadow)}
+.solved{color:var(--ok);font-weight:600}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:2px 0 14px}
+.item .t{display:block;font:600 17px/1.3 var(--sans)}
+.lvl{display:table;margin:7px 0 0;padding:1px 9px;border:1px solid currentColor;border-radius:999px;font:600 11px var(--mono);letter-spacing:.02em}
+.lvl-medium{color:var(--amber)}
+.lvl-hard{color:var(--bad)}
+.lvl-insane{background:var(--bad);border-color:var(--bad);color:var(--card)}
+.tag{color:var(--ok);font-size:14px}
+
+/* controls */
+input,select{flex:1;min-width:140px;padding:10px 12px;border:1px solid var(--line2);border-radius:3px;background:var(--bg);color:var(--text);font:14px var(--mono);caret-color:var(--accent)}
+input::placeholder{color:var(--muted);opacity:.85}
+input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+button,.btn{padding:10px 18px;border:1px solid transparent;border-radius:3px;background:var(--accent);color:var(--on);font:600 14px var(--sans);cursor:pointer;text-decoration:none;display:inline-block;transition:filter .15s,transform .1s}
+button:hover,.btn:hover{filter:brightness(1.12)}
+button:active,.btn:active{transform:translateY(1px)}
+button:focus-visible,.btn:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--line2)}
+
+/* rankings table: monospaced figures */
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+th{color:var(--muted);font:500 12px var(--sans);border-bottom:1px solid var(--line2)}
+td.n,th.n{text-align:right}
+td.n{font-family:var(--mono)}
+#board td:first-child{font-family:var(--mono);color:var(--muted);width:44px}
+#board tr:hover td{background:var(--panel2)}
+.me{font-weight:600}
+tr.me td{background:var(--ring);color:var(--text)}
+#board tr:first-child td:first-child:not([colspan]){box-shadow:inset 3px 0 var(--amber);color:var(--amber);font-weight:700}
+#board td.n:last-child{color:var(--amber);font-weight:700}
+
+/* progress: one segment per challenge */
+.prog{display:flex;gap:4px;margin:8px 0 4px}
+.dot{flex:1;height:6px;border-radius:1px;background:var(--line2);transition:background .4s}
+.dot.done{background:var(--ok)}.dot.now{background:var(--accent);animation:pulse 1.4s infinite}
+@keyframes pulse{50%{opacity:.4}}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* success dialog */
+#ov{position:fixed;inset:0;background:rgba(4,8,14,.72);display:none;align-items:center;justify-content:center;z-index:50;padding:16px;overflow:hidden}
+#ov.show{display:flex}
+#ov .box{background:var(--card);border:1px solid var(--line2);border-top:3px solid var(--ok);border-radius:3px;padding:26px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 24px 60px -20px rgba(0,0,0,.7);animation:pop .4s cubic-bezier(.2,1.4,.4,1);position:relative;z-index:2}
+#ov .box::before{content:"Flag verified";display:block;color:var(--ok);font:600 13px var(--mono);margin-bottom:14px}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.check{width:56px;height:56px;border-radius:3px;border:2px solid var(--ok);color:var(--ok);font-size:30px;line-height:52px;margin:0 auto 14px}
+#ov h3{margin:0 0 4px;font-size:20px;line-height:1.3}#ov p{margin:0 0 18px;color:var(--muted)}
+.c{position:absolute;top:-12px;width:9px;height:14px;opacity:.9;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.c{display:none}}
+
+/* ===== additions for the server version ===== */
+main.wide{max-width:1180px}
+label.f{display:block;font:500 12px var(--sans);color:var(--muted);margin:12px 0 4px}
+.cats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.cat{border:1px solid var(--line2);border-radius:3px;padding:14px;background:var(--bg);color:var(--text);text-align:left;cursor:pointer;font:inherit}
+.cat b{display:block;font-size:16px;margin-bottom:2px}.cat span{color:var(--muted);font-size:13px}
+.cat[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.cat:hover{filter:none;border-color:var(--accent)}
+.stack{display:flex;flex-direction:column;gap:10px}
+input.full{width:100%;flex:none}
+.btn.ghost,button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line2)}
+button.danger{background:var(--bad);color:#fff}
+.timer{font:600 14px var(--mono);color:var(--amber)}
+.chip{display:inline-block;font:600 11px var(--mono);padding:2px 7px;border-radius:2px;border:1px solid currentColor}
+.chip.solved{color:var(--ok)}.chip.skipped{color:var(--amber)}.chip.pending{color:var(--muted)}.chip.current{color:var(--accent)}
+.lvl-easy{color:var(--ok)}
+.mini{display:flex;flex-direction:column;gap:0}
+.mini .r{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.mini .r:last-child{border-bottom:0}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.toolbar input,.toolbar select{flex:0 1 220px}
+.tabs{display:flex;gap:6px}.tabs button{background:transparent;color:var(--text);border:1px solid var(--line2)}
+.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--on);border-color:var(--accent)}
+.scroll{overflow-x:auto}
+td.sm,th.sm{white-space:nowrap}
+tr.detail td{background:var(--panel2);padding:12px 16px}
+tr.row-main{cursor:pointer}tr.row-main:hover td{background:var(--panel2)}
+table.inner{width:auto;min-width:420px}table.inner th,table.inner td{padding:5px 14px 5px 0;border:0}
+.stats{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font:13px var(--mono)}
+.stats b{color:var(--text)}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.amber{color:var(--amber)}.muted{color:var(--muted)}
+
+/* ===== rooms list ===== */
+.room{padding:14px 18px}
+.room.done{border-left:3px solid var(--ok)}
+.room .rh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.room .t{font:600 17px/1.3 var(--sans);display:block}
+.room .meta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:8px 0 0;font:13px var(--mono);color:var(--muted)}
+.room .meta .timer{font-size:13px}
+.room .act{margin-top:12px}
+.room .act input{min-width:160px}
+.room .act .btn{white-space:nowrap}
+</style>
+</head>
+<body>
+<main class="wide">
+  <h1>Judges' dashboard</h1>
+  <p class="sub">Live records for every student: team, rooms opened and solved, and time taken.</p>
+
+  <!-- login -->
+  <section id="loginView" hidden>
+    <div class="card" style="max-width:420px">
+      <label class="f" for="pw" style="margin-top:0">Judge password</label>
+      <input class="full" id="pw" type="password" autocomplete="current-password">
+      <div class="row" style="margin-top:14px"><button id="loginBtn">Sign in</button></div>
+      <div class="msg" id="loginMsg" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- dashboard -->
+  <section id="dashView" hidden>
+    <div class="toolbar">
+      <div class="tabs" id="tabs"></div>
+      <input id="q" type="search" placeholder="Search name or team" aria-label="Search">
+      <select id="sort" aria-label="Sort by">
+        <option value="rank">Rank (points, then fastest)</option>
+        <option value="time">Total solve time</option>
+        <option value="solved">Most solved</option>
+        <option value="opened">Most rooms opened</option>
+        <option value="recent">Recently joined</option>
+        <option value="name">Name A–Z</option>
+      </select>
+      <span style="flex:1"></span>
+      <a class="btn ghost" id="sheetLink" target="_blank" rel="noopener" hidden>Open Google Sheet</a>
+      <button class="ghost" id="logout">Sign out</button>
+    </div>
+
+    <div class="stats" id="stats" style="margin-bottom:10px"></div>
+
+    <div class="card scroll" style="padding:6px 12px">
+      <table>
+        <thead><tr>
+          <th class="sm">#</th><th>Student</th><th>Team</th><th>Group</th>
+          <th class="n sm">Solved</th><th class="n sm">Opened</th><th class="n sm">Points</th><th class="n sm">Solve time</th><th class="sm">Status</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div class="note" id="foot" style="padding:6px 0 4px"></div>
+    </div>
+    <div class="note">Click a row to see each room. A room's clock starts when the student first clicks Open and stops when the flag is correct. Solve time is the total of those times for solved rooms. Refreshes every 5 seconds.</div>
+  </section>
+</main>
+
+<script>
+function $(i){return document.getElementById(i)}
+var DATA=null,TAB="all",open={},armed={},timer=null,cats=[];
+
+function fmt(ms){var s=Math.max(0,Math.round(ms/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;
+  return (h?h+"h ":"")+(h||m?m+"m ":"")+x+"s"}
+function ago(t){if(!t)return "—";var s=Math.floor((Date.now()-t)/1000);if(s<60)return s+"s ago";if(s<3600)return Math.floor(s/60)+"m ago";return Math.floor(s/3600)+"h ago"}
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+
+var JT="";try{JT=sessionStorage.getItem("ctf_judge")||""}catch(e){}
+function setJT(t){JT=t;try{if(t)sessionStorage.setItem("ctf_judge",t);else sessionStorage.removeItem("ctf_judge")}catch(e){}}
+function api(path,body){
+  var method=body===undefined?"GET":"POST";
+  return new Promise(function(resolve){
+    google.script.run
+      .withSuccessHandler(function(s){var r=JSON.parse(s);var j=r.body||{};j._status=r.status;resolve(j)})
+      .withFailureHandler(function(){resolve({error:"Cannot reach the server.",_status:500})})
+      .handle(method+" "+path,body===undefined?null:body,JT);
+  });
+}
+
+/* ---- login ---- */
+$("loginBtn").onclick=function(){
+  api("/api/judge/login",{password:$("pw").value}).then(function(r){
+    if(r.error){$("loginMsg").style.color="var(--bad)";$("loginMsg").textContent=r.error;return}
+    setJT(r.token);$("pw").value="";load();
+  });
+};
+$("pw").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();$("loginBtn").click()}});
+$("logout").onclick=function(){api("/api/judge/logout",{}).then(function(){setJT("");clearInterval(timer);timer=null;$("dashView").hidden=true;$("loginView").hidden=false})};
+
+/* ---- data ---- */
+function load(){
+  api("/api/judge/records").then(function(r){
+    if(r._status===401){clearInterval(timer);timer=null;$("dashView").hidden=true;$("loginView").hidden=false;return}
+    DATA=r;if(r.sheetUrl){$("sheetLink").href=r.sheetUrl;$("sheetLink").hidden=false}$("loginView").hidden=true;$("dashView").hidden=false;
+    cats=[];r.rows.forEach(function(x){if(!cats.some(function(c){return c.key===x.category}))cats.push({key:x.category,label:x.categoryLabel})});
+    buildTabs();render();
+    if(!timer)timer=setInterval(load,5000);
+  });
+}
+function buildTabs(){
+  var t=$("tabs");t.innerHTML="";
+  [{key:"all",label:"All"}].concat(cats).forEach(function(c){
+    var b=el("button",null,c.label);b.setAttribute("aria-pressed",TAB===c.key?"true":"false");
+    b.onclick=function(){TAB=c.key;buildTabs();render()};t.appendChild(b);
+  });
+}
+function rankSort(a,b){return b.points-a.points||a.solveMs-b.solveMs||a.joinedAt-b.joinedAt}
+function render(){
+  var rows=DATA.rows.slice(),q=$("q").value.trim().toLowerCase();
+  // rank within each group
+  var rankOf={};["juniors","seniors"].concat(cats.map(function(c){return c.key})).forEach(function(k){
+    rows.filter(function(r){return r.category===k}).sort(rankSort).forEach(function(r,i){rankOf[r.id]=i+1});
+  });
+  if(TAB!=="all")rows=rows.filter(function(r){return r.category===TAB});
+  var all=rows.length;
+  if(q)rows=rows.filter(function(r){return (r.name+" "+r.team).toLowerCase().indexOf(q)>-1});
+  var s=$("sort").value;
+  rows.sort({
+    rank:function(a,b){return a.category.localeCompare(b.category)||rankSort(a,b)},
+    time:function(a,b){return (a.solved?0:1)-(b.solved?0:1)||a.solveMs-b.solveMs},
+    solved:function(a,b){return b.solved-a.solved||a.solveMs-b.solveMs},
+    opened:function(a,b){return b.opened-a.opened},
+    recent:function(a,b){return b.joinedAt-a.joinedAt},
+    name:function(a,b){return a.name.localeCompare(b.name)}
+  }[s]);
+
+  var tb=$("rows");tb.innerHTML="";
+  if(!rows.length){var tr=el("tr");var td=el("td","pts","No students yet.");td.colSpan=9;tr.appendChild(td);tb.appendChild(tr)}
+  rows.forEach(function(r){
+    var tr=el("tr","row-main");
+    var status=r.finished?"Finished":"Playing";
+    var vals=[rankOf[r.id],r.name,r.team,r.categoryLabel,r.solved+"/"+r.total,r.opened,r.points,r.solved?fmt(r.solveMs):"—",status];
+    vals.forEach(function(v,k){
+      var td=el("td",(k>=4&&k<=7?"n sm":(k===0||k===8?"sm":"")),v);
+      if(k===8)td.className+=r.finished?" ok":" muted";
+      if(k===6)td.style.fontWeight="700";
+      tr.appendChild(td);
+    });
+    tr.onclick=function(){open[r.id]=!open[r.id];render()};
+    tb.appendChild(tr);
+    if(open[r.id]){
+      var dr=el("tr","detail"),dd=el("td");dd.colSpan=9;
+      var t=el("table","inner"),h=el("thead"),hr=el("tr");
+      ["Room","Status","Time spent","Wrong tries","Opened"].forEach(function(x){hr.appendChild(el("th",null,x))});h.appendChild(hr);t.appendChild(h);
+      var b=el("tbody");
+      r.detail.forEach(function(d){
+        var x=el("tr");
+        x.appendChild(el("td",null,d.id+". "+d.title+(d.level?" ("+d.level+")":"")+" · "+d.points+" pts"));
+        var st=d.status==="solved"?"SOLVED":d.opens?"OPENED":"NOT STARTED";
+        var c=el("td",null,st);c.className=d.status==="solved"?"ok":d.opens?"amber":"muted";x.appendChild(c);
+        x.appendChild(el("td",null,d.timeMs?fmt(d.timeMs):"—"));
+        x.appendChild(el("td",null,d.wrongAttempts));
+        x.appendChild(el("td",null,d.opens?d.opens+"×":"—"));
+        b.appendChild(x);
+      });
+      t.appendChild(b);dd.appendChild(t);
+      var isArmed=armed[r.id]&&Date.now()-armed[r.id]<8000;
+      var del=el("button","danger",isArmed?"Click again to delete "+r.name:"Delete this record");del.style.marginTop="10px";
+      del.onclick=function(e){e.stopPropagation();
+        if(armed[r.id]&&Date.now()-armed[r.id]<8000){delete armed[r.id];api("/api/judge/delete",{id:r.id}).then(function(){open[r.id]=false;load()})}
+        else{armed[r.id]=Date.now();render()}};
+      dd.appendChild(del);dr.appendChild(dd);tb.appendChild(dr);
+    }
+  });
+
+  var tot=DATA.rows,fin=tot.filter(function(r){return r.finished}).length;
+  $("stats").innerHTML="";
+  [["Students",tot.length],["Playing now",tot.length-fin],["Finished",fin]].forEach(function(p){
+    var sp=el("span",null,p[0]+" ");sp.appendChild(el("b",null,p[1]));$("stats").appendChild(sp)});
+  $("foot").textContent=(q?rows.length+" of "+all+" shown":all+" shown")+" · updated "+new Date(DATA.now).toLocaleTimeString();
+}
+$("q").addEventListener("input",render);$("sort").addEventListener("change",render);
+load();
+$("loginView").hidden=false; // shown until the first response says otherwise
+</script>
+</body>
+</html>
