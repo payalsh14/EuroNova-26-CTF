@@ -1,319 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Euronova CTF</title>
-<style>:root{--sans:"IBM Plex Sans","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:"IBM Plex Mono","JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;--bg:#eef1f5;--card:#fff;--panel2:#f4f6f9;--line:#d8dee7;--line2:#b9c4d2;--text:#16202d;--muted:#5a6a7e;--accent:#1c64d6;--on:#fff;--ok:#0f7d4a;--bad:#c52b3a;--amber:#955c00;--ring:rgba(28,100,214,.22);--grid:rgba(30,70,130,.05);--grid2:rgba(30,70,130,.09);--shadow:0 1px 2px rgba(20,35,60,.06),0 10px 24px -18px rgba(20,35,60,.35);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#090c11;--card:#10151c;--panel2:#161d27;--line:#222d3b;--line2:#34455a;--text:#dde6f0;--muted:#8393a8;--accent:#4aa8ff;--on:#06121f;--ok:#3fd08a;--bad:#ff6b73;--amber:#f2b34a;--ring:rgba(74,168,255,.28);--grid:rgba(120,160,210,.045);--grid2:rgba(120,160,210,.09);--shadow:0 1px 2px rgba(0,0,0,.5),0 14px 30px -18px rgba(0,0,0,.8);color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#090c11;--card:#10151c;--panel2:#161d27;--line:#222d3b;--line2:#34455a;--text:#dde6f0;--muted:#8393a8;--accent:#4aa8ff;--on:#06121f;--ok:#3fd08a;--bad:#ff6b73;--amber:#f2b34a;--ring:rgba(74,168,255,.28);--grid:rgba(120,160,210,.045);--grid2:rgba(120,160,210,.09);--shadow:0 1px 2px rgba(0,0,0,.5),0 14px 30px -18px rgba(0,0,0,.8);color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-::selection{background:var(--accent);color:var(--on)}
-body{margin:0;background-color:var(--bg);background-image:linear-gradient(var(--grid2) 1px,transparent 1px),linear-gradient(90deg,var(--grid2) 1px,transparent 1px),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:100px 100px,100px 100px,20px 20px,20px 20px;color:var(--text);font:15px/1.55 var(--sans)}
-main{max-width:760px;margin:0 auto;padding:28px 16px 56px}
-
-/* masthead: title with a measurement ruler */
-h1{font:600 clamp(26px,6vw,34px)/1.15 var(--sans);letter-spacing:-.01em;margin:0}
-h1::before{content:"";display:inline-block;width:8px;height:.8em;margin-right:.45em;background:var(--accent);vertical-align:-.06em}
-.sub{color:var(--muted);margin:8px 0 28px;max-width:56ch}
-.sub::after{content:"";display:block;height:12px;margin-top:16px;border-top:1px solid var(--line2);background:repeating-linear-gradient(90deg,var(--line2) 0 1px,transparent 1px 10px) 0 0/100% 5px no-repeat,repeating-linear-gradient(90deg,var(--line2) 0 1px,transparent 1px 50px) 0 0/100% 11px no-repeat}
-
-/* section headers with a hairline rule */
-h2{display:flex;align-items:center;gap:10px;font:600 14px/1.2 var(--sans);margin:34px 0 12px}
-h2::before{content:"";width:6px;height:6px;background:var(--accent)}
-h2::after{content:"";flex:1;height:1px;background:var(--line)}
-
-.pts{color:var(--muted);font:13px var(--mono)}
-.note{color:var(--muted);font-size:13px;margin-top:10px}
-.msg{font-size:14px;margin-top:10px;min-height:20px}
-.msg:not(:empty){padding:6px 10px;border-left:2px solid currentColor;background:var(--panel2)}
-
-/* panels with corner registration marks */
-.card{--tick:var(--line2);position:relative;border:1px solid var(--line);border-radius:3px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);transition:border-color .2s,box-shadow .2s;
-background:
-linear-gradient(var(--tick),var(--tick)) 0 0/14px 2px no-repeat,linear-gradient(var(--tick),var(--tick)) 0 0/2px 14px no-repeat,
-linear-gradient(var(--tick),var(--tick)) 100% 0/14px 2px no-repeat,linear-gradient(var(--tick),var(--tick)) 100% 0/2px 14px no-repeat,
-linear-gradient(var(--tick),var(--tick)) 0 100%/14px 2px no-repeat,linear-gradient(var(--tick),var(--tick)) 0 100%/2px 14px no-repeat,
-linear-gradient(var(--tick),var(--tick)) 100% 100%/14px 2px no-repeat,linear-gradient(var(--tick),var(--tick)) 100% 100%/2px 14px no-repeat,
-var(--card)}
-#chal{--tick:var(--accent);border-color:var(--line2)}
-#chal:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring),var(--shadow)}
-.solved{color:var(--ok);font-weight:600}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.item{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:2px 0 14px}
-.item .t{display:block;font:600 17px/1.3 var(--sans)}
-.lvl{display:table;margin:7px 0 0;padding:1px 9px;border:1px solid currentColor;border-radius:999px;font:600 11px var(--mono);letter-spacing:.02em}
-.lvl-medium{color:var(--amber)}
-.lvl-hard{color:var(--bad)}
-.lvl-insane{background:var(--bad);border-color:var(--bad);color:var(--card)}
-.tag{color:var(--ok);font-size:14px}
-
-/* controls */
-input,select{flex:1;min-width:140px;padding:10px 12px;border:1px solid var(--line2);border-radius:3px;background:var(--bg);color:var(--text);font:14px var(--mono);caret-color:var(--accent)}
-input::placeholder{color:var(--muted);opacity:.85}
-input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
-button,.btn{padding:10px 18px;border:1px solid transparent;border-radius:3px;background:var(--accent);color:var(--on);font:600 14px var(--sans);cursor:pointer;text-decoration:none;display:inline-block;transition:filter .15s,transform .1s}
-button:hover,.btn:hover{filter:brightness(1.12)}
-button:active,.btn:active{transform:translateY(1px)}
-button:focus-visible,.btn:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
-.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--line2)}
-
-/* rankings table: monospaced figures */
-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
-th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
-tbody tr:last-child td{border-bottom:0}
-th{color:var(--muted);font:500 12px var(--sans);border-bottom:1px solid var(--line2)}
-td.n,th.n{text-align:right}
-td.n{font-family:var(--mono)}
-#board td:first-child{font-family:var(--mono);color:var(--muted);width:44px}
-#board tr:hover td{background:var(--panel2)}
-.me{font-weight:600}
-tr.me td{background:var(--ring);color:var(--text)}
-#board tr:first-child td:first-child:not([colspan]){box-shadow:inset 3px 0 var(--amber);color:var(--amber);font-weight:700}
-#board td.n:last-child{color:var(--amber);font-weight:700}
-
-/* progress: one segment per challenge */
-.prog{display:flex;gap:4px;margin:8px 0 4px}
-.dot{flex:1;height:6px;border-radius:1px;background:var(--line2);transition:background .4s}
-.dot.done{background:var(--ok)}.dot.now{background:var(--accent);animation:pulse 1.4s infinite}
-@keyframes pulse{50%{opacity:.4}}
-.shake{animation:shake .35s}
-@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-
-/* success dialog */
-#ov{position:fixed;inset:0;background:rgba(4,8,14,.72);display:none;align-items:center;justify-content:center;z-index:50;padding:16px;overflow:hidden}
-#ov.show{display:flex}
-#ov .box{background:var(--card);border:1px solid var(--line2);border-top:3px solid var(--ok);border-radius:3px;padding:26px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 24px 60px -20px rgba(0,0,0,.7);animation:pop .4s cubic-bezier(.2,1.4,.4,1);position:relative;z-index:2}
-#ov .box::before{content:"Flag verified";display:block;color:var(--ok);font:600 13px var(--mono);margin-bottom:14px}
-@keyframes pop{from{transform:scale(.6);opacity:0}}
-.check{width:56px;height:56px;border-radius:3px;border:2px solid var(--ok);color:var(--ok);font-size:30px;line-height:52px;margin:0 auto 14px}
-#ov h3{margin:0 0 4px;font-size:20px;line-height:1.3}#ov p{margin:0 0 18px;color:var(--muted)}
-.c{position:absolute;top:-12px;width:9px;height:14px;opacity:.9;animation:fall linear forwards}
-@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
-
-[hidden]{display:none!important}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.c{display:none}}
-
-/* ===== additions for the server version ===== */
-main.wide{max-width:1180px}
-label.f{display:block;font:500 12px var(--sans);color:var(--muted);margin:12px 0 4px}
-.cats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
-.cat{border:1px solid var(--line2);border-radius:3px;padding:14px;background:var(--bg);color:var(--text);text-align:left;cursor:pointer;font:inherit}
-.cat b{display:block;font-size:16px;margin-bottom:2px}.cat span{color:var(--muted);font-size:13px}
-.cat[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
-.cat:hover{filter:none;border-color:var(--accent)}
-.stack{display:flex;flex-direction:column;gap:10px}
-input.full{width:100%;flex:none}
-.btn.ghost,button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line2)}
-button.danger{background:var(--bad);color:#fff}
-.timer{font:600 14px var(--mono);color:var(--amber)}
-.chip{display:inline-block;font:600 11px var(--mono);padding:2px 7px;border-radius:2px;border:1px solid currentColor}
-.chip.solved{color:var(--ok)}.chip.skipped{color:var(--amber)}.chip.pending{color:var(--muted)}.chip.current{color:var(--accent)}
-.lvl-easy{color:var(--ok)}
-.mini{display:flex;flex-direction:column;gap:0}
-.mini .r{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
-.mini .r:last-child{border-bottom:0}
-.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
-.toolbar input,.toolbar select{flex:0 1 220px}
-.tabs{display:flex;gap:6px}.tabs button{background:transparent;color:var(--text);border:1px solid var(--line2)}
-.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--on);border-color:var(--accent)}
-.scroll{overflow-x:auto}
-td.sm,th.sm{white-space:nowrap}
-tr.detail td{background:var(--panel2);padding:12px 16px}
-tr.row-main{cursor:pointer}tr.row-main:hover td{background:var(--panel2)}
-table.inner{width:auto;min-width:420px}table.inner th,table.inner td{padding:5px 14px 5px 0;border:0}
-.stats{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font:13px var(--mono)}
-.stats b{color:var(--text)}
-.ok{color:var(--ok)}.bad{color:var(--bad)}.amber{color:var(--amber)}.muted{color:var(--muted)}
-
-/* ===== rooms list ===== */
-.room{padding:14px 18px}
-.room.done{border-left:3px solid var(--ok)}
-.room .rh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.room .t{font:600 17px/1.3 var(--sans);display:block}
-.room .meta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:8px 0 0;font:13px var(--mono);color:var(--muted)}
-.room .meta .timer{font-size:13px}
-.room .act{margin-top:12px}
-.room .act input{min-width:160px}
-.room .act .btn{white-space:nowrap}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Euronova CTF - Student Registration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<main>
-  <h1 id="title">Euronova CTF</h1>
-  <p class="sub" id="sub">Register with your group and team, open each room on the official CyLab website, then submit the flag here.</p>
+<body class="bg-gray-950 text-gray-100 min-h-screen flex items-center justify-center p-4 font-sans">
 
-  <!-- 1. JOIN -->
-  <section id="joinView" hidden>
-    <div class="card">
-      <label class="f" style="margin-top:0">I am a</label>
-      <div class="cats" id="cats"></div>
-
-      <label class="f" for="name">Your name</label>
-      <input class="full" id="name" maxlength="40" autocomplete="off" placeholder="e.g. Aarav Sharma">
-
-      <label class="f" for="team">Team name</label>
-      <input class="full" id="team" maxlength="40" autocomplete="off" placeholder="e.g. Null Pointers">
-
-      <div class="row" style="margin-top:16px"><button id="joinBtn">Start</button></div>
-      <div class="msg" id="joinMsg" role="status" aria-live="polite"></div>
-      <div class="note">Closed the page by mistake? Enter the same group, name and team to continue where you left off.</div>
+  <div class="bg-gray-900 border border-gray-800 rounded-2xl w-full max-w-md p-6 shadow-2xl">
+    <div class="text-center mb-6">
+      <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+        Euronova CTF Registration
+      </h1>
+      <p class="text-xs text-gray-400 mt-1">Select your track and enter team details to begin</p>
     </div>
-  </section>
 
-  <!-- 2. PLAY -->
-  <section id="playView" hidden>
-    <div class="card" style="padding:12px 18px">
-      <div class="top">
-        <div><b id="who"></b> <span class="muted" id="whoTeam"></span></div>
-        <div class="stats"><span>Points <b id="pts">0</b></span><span>Solved <b id="slv">0</b></span></div>
+    <form id="ctfRegisterForm" class="space-y-5">
+      
+      <!-- Category Selection (Juniors / Seniors) -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+          Select Category <span class="text-red-400">*</span>
+        </label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex items-center justify-center p-3 rounded-xl border border-gray-800 bg-gray-950 cursor-pointer hover:border-blue-500 transition has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+            <input type="radio" name="category" value="Juniors" class="sr-only" required />
+            <div class="text-center">
+              <span class="block text-sm font-semibold text-white">Juniors</span>
+              <span class="block text-[10px] text-gray-400">1st & 2nd Year</span>
+            </div>
+          </label>
+
+          <label class="flex items-center justify-center p-3 rounded-xl border border-gray-800 bg-gray-950 cursor-pointer hover:border-blue-500 transition has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+            <input type="radio" name="category" value="Seniors" class="sr-only" required />
+            <div class="text-center">
+              <span class="block text-sm font-semibold text-white">Seniors</span>
+              <span class="block text-[10px] text-gray-400">3rd & 4th Year</span>
+            </div>
+          </label>
+        </div>
       </div>
-    </div>
-    <div class="prog" id="prog"></div>
-    <h2 style="margin-top:12px">Your rooms</h2>
-    <div class="note" style="margin:-4px 0 12px">Click <b>Open room</b> to go to the official CyLab website and do the task. Come back here and submit the flag. Your time for a room starts when you first open it.</div>
-    <div id="rooms"></div>
-  </section>
-</main>
 
-<div id="ov" role="dialog" aria-modal="true" aria-labelledby="ovt"><div id="conf"></div><div class="box"><div class="check">✓</div><h3 id="ovt"></h3><p id="ovs"></p><button id="ovb"></button></div></div>
+      <!-- Team Name -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
+          Team Name <span class="text-red-400">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="teamName" 
+          required 
+          placeholder="e.g. CyberKnights" 
+          class="w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
+        />
+      </div>
 
-<script>
-function $(i){return document.getElementById(i)}
-var TOKEN=null,STATE=null,CATEGORY=null,tick=null,syncedAt=0;
-try{TOKEN=localStorage.getItem("ctf_token")}catch(e){}
+      <!-- Team Leader ID / Roll -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
+          Team Leader Roll / ID <span class="text-red-400">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="rollId" 
+          required 
+          placeholder="e.g. 21CS042" 
+          class="w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
+        />
+      </div>
 
-function api(path,body){
-  var method=body===undefined?"GET":"POST";
-  return new Promise(function(resolve,reject){
-    google.script.run
-      .withSuccessHandler(function(s){var r=JSON.parse(s);var j=r.body||{};j._status=r.status;resolve(j)})
-      .withFailureHandler(function(e){reject(e)})
-      .handle(method+" "+path,body===undefined?null:body,TOKEN||"");
-  });
-}
-function warn(el,t){el.style.color="var(--bad)";el.textContent=t}
-function fmt(ms){var s=Math.max(0,Math.floor(ms/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;
-  return (h?h+":":"")+(h?("0"+m).slice(-2):m)+":"+("0"+x).slice(-2)}
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg text-sm transition shadow-lg shadow-blue-600/20"
+        style="width: 100%; background-color: #2563eb; color: white; padding: 0.625rem; border-radius: 0.5rem; font-weight: 500; text-align: center; cursor: pointer;"
+      >
+        Enter CTF Arena
+      </button>
 
-/* ---------- join ---------- */
-function loadConfig(){
-  api("/api/config").then(function(c){
-    document.title=c.eventName;$("title").textContent=c.eventName;
-    var box=$("cats");box.innerHTML="";
-    c.categories.forEach(function(k){
-      var b=document.createElement("button");b.type="button";b.className="cat";b.setAttribute("aria-pressed","false");
-      b.innerHTML="<b></b><span></span>";b.querySelector("b").textContent=k.label;
-      b.querySelector("span").textContent=k.count+" challenges"+(k.description?" · "+k.description:"");
-      b.onclick=function(){CATEGORY=k.key;[].forEach.call(box.children,function(x){x.setAttribute("aria-pressed",x===b?"true":"false")})};
-      box.appendChild(b);
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('ctfRegisterForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const category = document.querySelector('input[name="category"]:checked')?.value;
+      const teamName = document.getElementById('teamName').value.trim();
+      const rollId = document.getElementById('rollId').value.trim();
+
+      if (!category || !teamName || !rollId) {
+        alert("Please complete all required fields.");
+        return;
+      }
+
+      // Store CTF Registration state locally
+      const ctfSession = { category, teamName, rollId, registeredAt: new Date().toISOString() };
+      localStorage.setItem('euronova_ctf_session', JSON.stringify(ctfSession));
+
+      alert(`Registration Successful!\nTrack: ${category}\nTeam: ${teamName}`);
+      
+      // Redirect to CTF challenge arena if available
+      // window.location.href = "arena.html";
     });
-  });
-}
-$("joinBtn").onclick=function(){
-  var m=$("joinMsg");m.textContent="";
-  if(!CATEGORY){warn(m,"Choose Juniors or Seniors first.");return}
-  api("/api/join",{category:CATEGORY,name:$("name").value,team:$("team").value}).then(function(r){
-    if(r.error){warn(m,r.error);return}
-    TOKEN=r.token;try{localStorage.setItem("ctf_token",TOKEN)}catch(e){}
-    refresh();
-  }).catch(function(){warn(m,"Cannot reach the server.")});
-};
-[$("name"),$("team")].forEach(function(i){i.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();$("joinBtn").click()}})});
-
-/* ---------- play ---------- */
-var drafts={},msgs={};
-function refresh(){
-  if(!TOKEN){show("join");return}
-  api("/api/me").then(function(s){
-    if(s._status===401){TOKEN=null;try{localStorage.removeItem("ctf_token")}catch(e){}show("join");return}
-    STATE=s;syncedAt=Date.now();render();show("play");
-  }).catch(function(){show(STATE?"play":"join")});
-}
-function show(v){$("joinView").hidden=v!=="join";$("playView").hidden=v!=="play"}
-
-function mk(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
-function render(){
-  var s=STATE;
-  $("sub").textContent=s.categoryLabel+" \u00b7 Open a room, solve it on the official site, then submit the flag here.";
-  $("who").textContent=s.name;$("whoTeam").textContent="\u00b7 Team "+s.team;
-  $("pts").textContent=s.points;$("slv").textContent=s.solved+"/"+s.total;
-
-  var p=$("prog");p.innerHTML="";
-  s.rooms.forEach(function(r){p.appendChild(mk("div","dot"+(r.status==="solved"?" done":(r.opened?" now":""))))});
-
-  var box=$("rooms");box.innerHTML="";
-  s.rooms.forEach(function(r){
-    var done=r.status==="solved";
-    var card=mk("div","card room"+(done?" done":""));
-    var h=mk("div","rh");
-    var left=mk("div");
-    var t=mk("span","t",r.index+". "+r.title);left.appendChild(t);
-    if(r.level){left.appendChild(mk("span","lvl lvl-"+r.level.toLowerCase(),r.level))}
-    var st=done?"solved":(r.opened?"current":"pending");
-    h.appendChild(left);h.appendChild(mk("span","chip "+st,done?"SOLVED":(r.opened?"IN PROGRESS":"NOT STARTED")));
-    card.appendChild(h);
-
-    var meta=mk("div","meta");meta.appendChild(mk("span",null,r.points+" pts"));
-    var tm=mk("span","timer");
-    if(done){tm.textContent="Solved in "+fmt(r.elapsedMs);tm.style.color="var(--ok)"}
-    else if(r.opened){tm.className="timer rt";tm.setAttribute("data-base",r.elapsedMs);tm.textContent="Time "+fmt(r.elapsedMs)}
-    meta.appendChild(tm);card.appendChild(meta);
-
-    if(!done){
-      var act=mk("div","row act");
-      var a=mk("a","btn","Open room \u2197");a.href=r.url;a.target="_blank";a.rel="noopener";
-      a.onclick=function(){api("/api/open",{id:r.id}).then(refresh)};
-      var inp=mk("input");inp.placeholder=s.flagHint;inp.autocomplete="off";inp.autocapitalize="off";inp.spellcheck=false;
-      inp.setAttribute("aria-label","Flag for "+r.title);inp.value=drafts[r.id]||"";
-      inp.addEventListener("input",function(){drafts[r.id]=inp.value});
-      var go=mk("button",null,"Submit");
-      var msg=mk("div","msg");msg.setAttribute("role","status");msg.setAttribute("aria-live","polite");
-      if(msgs[r.id]){msg.style.color="var(--bad)";msg.textContent=msgs[r.id]}
-      var submit=function(){
-        var f=inp.value.trim();
-        if(!f){msgs[r.id]="Enter a flag first.";msg.style.color="var(--bad)";msg.textContent=msgs[r.id];return}
-        go.disabled=true;
-        api("/api/submit",{id:r.id,flag:f}).then(function(x){
-          go.disabled=false;
-          if(x._status===401){refresh();return}
-          if(x.error){msgs[r.id]=x.error;msg.style.color="var(--bad)";msg.textContent=x.error;return}
-          if(x.ok){delete drafts[r.id];delete msgs[r.id];celebrate(x);refresh()}
-          else{
-            msgs[r.id]=x.message||"Wrong flag, try again.";msg.style.color="var(--bad)";msg.textContent=msgs[r.id];
-            inp.classList.remove("shake");void inp.offsetWidth;inp.classList.add("shake");
-          }
-        }).catch(function(){go.disabled=false;msg.style.color="var(--bad)";msg.textContent="Cannot reach the server."});
-      };
-      go.onclick=submit;
-      inp.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();submit()}});
-      act.appendChild(a);act.appendChild(inp);act.appendChild(go);card.appendChild(act);card.appendChild(msg);
-    }
-    box.appendChild(card);
-  });
-  clearInterval(tick);
-  tick=setInterval(function(){
-    [].forEach.call(document.querySelectorAll(".rt"),function(e){e.textContent="Time "+fmt(Number(e.getAttribute("data-base"))+Date.now()-syncedAt)});
-  },1000);
-}
-
-function celebrate(r){
-  var left=STATE.rooms.filter(function(i){return i.status!=="solved"&&i.id!==r.solvedId}).length;
-  $("ovt").textContent=left?"Perfection! "+r.title+" complete":"Perfection! All rooms complete";
-  $("ovs").textContent="+"+r.gained+" points"+(left?" \u00b7 "+left+" room"+(left>1?"s":"")+" to go":"");
-  $("ovb").textContent=left?"Back to rooms":"Close";
-  var cf=$("conf");cf.innerHTML="";var cols=["#2f5bea","#1a8f4c","#f5a623","#e04f8a","#8e44ad"];
-  for(var i=0;i<50;i++){var s=document.createElement("span");s.className="c";s.style.left=Math.random()*100+"%";s.style.background=cols[i%5];s.style.animationDuration=(1.8+Math.random()*1.8)+"s";s.style.animationDelay=(Math.random()*.6)+"s";cf.appendChild(s)}
-  $("ov").classList.add("show");setTimeout(function(){$("ovb").focus()},150);
-}
-function closeOv(){if(!$("ov").classList.contains("show"))return;$("ov").classList.remove("show");window.scrollTo(0,0)}
-$("ovb").onclick=closeOv;
-document.addEventListener("keydown",function(e){if(e.key==="Escape")closeOv()});
-
-loadConfig();
-refresh();
-</script>
+  </script>
 </body>
 </html>
